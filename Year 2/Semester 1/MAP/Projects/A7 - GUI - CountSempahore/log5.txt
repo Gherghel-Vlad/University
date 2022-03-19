@@ -1,0 +1,453 @@
+ExeStack:
+(int a;(int b;(bool res;(a=5;(b=10;(res=(a < b);print(res)))))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ int a
+(int b;(bool res;(a=5;(b=10;(res=(a < b);print(res))))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ int a
+(int b;(bool res;(a=5;(b=10;(res=(a < b);print(res))))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(int b;(bool res;(a=5;(b=10;(res=(a < b);print(res))))))
+SymTable:
+a --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(int b;(bool res;(a=5;(b=10;(res=(a < b);print(res))))))
+SymTable:
+a --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ int b
+(bool res;(a=5;(b=10;(res=(a < b);print(res)))))
+SymTable:
+a --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ int b
+(bool res;(a=5;(b=10;(res=(a < b);print(res)))))
+SymTable:
+a --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(bool res;(a=5;(b=10;(res=(a < b);print(res)))))
+SymTable:
+a --> 0
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(bool res;(a=5;(b=10;(res=(a < b);print(res)))))
+SymTable:
+a --> 0
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ bool res
+(a=5;(b=10;(res=(a < b);print(res))))
+SymTable:
+a --> 0
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ bool res
+(a=5;(b=10;(res=(a < b);print(res))))
+SymTable:
+a --> 0
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(a=5;(b=10;(res=(a < b);print(res))))
+SymTable:
+a --> 0
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(a=5;(b=10;(res=(a < b);print(res))))
+SymTable:
+a --> 0
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ a=5
+(b=10;(res=(a < b);print(res)))
+SymTable:
+a --> 0
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ a=5
+(b=10;(res=(a < b);print(res)))
+SymTable:
+a --> 0
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(b=10;(res=(a < b);print(res)))
+SymTable:
+a --> 5
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(b=10;(res=(a < b);print(res)))
+SymTable:
+a --> 5
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ b=10
+(res=(a < b);print(res))
+SymTable:
+a --> 5
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ b=10
+(res=(a < b);print(res))
+SymTable:
+a --> 5
+res --> false
+b --> 0
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(res=(a < b);print(res))
+SymTable:
+a --> 5
+res --> false
+b --> 10
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(res=(a < b);print(res))
+SymTable:
+a --> 5
+res --> false
+b --> 10
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ res=(a < b)
+print(res)
+SymTable:
+a --> 5
+res --> false
+b --> 10
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ res=(a < b)
+print(res)
+SymTable:
+a --> 5
+res --> false
+b --> 10
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+print(res)
+SymTable:
+a --> 5
+res --> true
+b --> 10
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+print(res)
+SymTable:
+a --> 5
+res --> true
+b --> 10
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+
+SymTable:
+a --> 5
+res --> true
+b --> 10
+Out:
+true
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+
+SymTable:
+a --> 5
+res --> true
+b --> 10
+Out:
+true
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+

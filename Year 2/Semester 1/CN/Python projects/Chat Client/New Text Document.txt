@@ -1,0 +1,32 @@
+
+import socket
+import select
+import sys
+import fileinput
+
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(("192.168.0.155", 1234))
+except socket.error as e:
+    print(e.strerror)
+    exit(-1)
+
+ins = [s]
+outs = []
+
+while ins:
+    r,w,e = select.select(ins, outs, ins)
+    for ss in r:
+        if (ss == s):
+            data = ss.recv(1024)
+            print(data.decode())
+        else:
+            mess = ""
+            for line in fileinput.input():
+                mess += line
+            s.send(mess.encode())
+    for ss in w:
+        pass
+    for ss in e:
+        print("Error")
+        exit(-1)

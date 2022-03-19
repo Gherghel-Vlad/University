@@ -1,0 +1,220 @@
+
+
+	TRANSACTIONS. CONCURENCY CONTROL (2)
+
+- C - set of transactions
+	Sch(C) - set of schedules for C
+	Op(C) - set of operations for the transations in C
+	S in Sch(C)
+
+	Conflict relation of S
+	conflict relation = {(op1, op2) | op1, op2 belong to Op(C), op1 occurs before op2 in S; op1, op2 in conflict}
+
+	T1	 T2	
+	W(A)
+		R(a)
+
+	T1	 T2	
+		R(A)
+	W(A)
+
+
+	S1, S2 belong to Sch(C)
+
+	S1 equivalent c(lower to the sign) S2 if conflict(S1) = conflict(S2)
+
+	T1	S1	T2
+	R(A)
+	A:=A-100
+	W(A)
+	R(B)
+	B:=B+200
+	W(B)
+			R(A)
+			A:=A*0.25
+			W(A)
+			R(B)
+			B:=B+100
+			W(B)
+
+
+	T1	S2	T2
+	R(A)
+	A:=A-100
+	W(A)
+			R(A)
+			A:=A*0.25
+			W(A)
+	R(B)
+	B:=B+200
+	W(B)
+			R(B)
+			B:=B+100
+			W(B)
+
+
+
+	T1	S3	T2
+			R(A)
+			A:=A*0.25
+			W(A)
+			R(B)
+			B:=B+100
+			W(B)
+	R(A)
+	A:=A-100
+	W(A)
+	R(B)
+	B:=B+200
+	W(B)
+		
+
+conflict(S1) = {(Read(T1, A), Write(T2, A)), (Write(T1, A), Read(T2, A)), (Write(T1, A), Wrte(T2, A))
+		(Read(T1, B), Write(T2, B)), (Write(T1, B), Read(T2, B)), (Write(T1, B), Wrte(T2, B))}
+
+
+conflict (S2) = conflict(S1) => S1 equivalent C S2
+
+conflict (S1) =/= conflict(S3)
+
+-S belong Sch(C)
+S is conflict serializable if exists S0 bleong to Sch(C), S0 serial such that S equivalent c S0
+
+- precedence graph for S
+	- one node for every commited tran. in S
+	- arc from Ti to Tj if an op in Ti precedes and conflicts with on of the opertaions in Tj
+
+- thedeu
+ 	S belond to Sch(C) is conflict serializable if its precedence graph if is acyclic
+
+	E1 
+
+	T1	T2		T1 <----> T2
+	R(A)			cycle - S not conf serializable
+	W(A)
+		R(A)
+		W(A)
+		R(B)
+		W(B)
+	R(A)
+	W(A)
+
+
+
+ - conflict serializability implies serializable if you dont have Insert or Delete
+
+-C, Sch(C)
+Ti, Tj belong to C
+S1, S2 belocng to Sch(C)
+
+S1 equivalent v (low to the sign) if:
+	a) if Ti reads the initial value of some item I in S1, thenTi also reads the initial value of that item in S2
+	b) if Ti reads the value of some item I written by Tj in S1, then Ti reads the value of item I writtenby Tj in S2
+	c) if Ti writes the final value of I inS1, then Ti writes the finale value of I in S2
+
+
+
+	T1	S1	T2
+	R(A)
+	A:=A-100
+	W(A)
+	R(B)
+	B:=B+200
+	W(B)
+			R(A)
+			A:=A*0.25
+			W(A)
+			R(B)
+			B:=B+100
+			W(B)
+
+
+	T1	S2	T2
+	R(A)
+	A:=A-100
+	W(A)
+			R(A)
+			A:=A*0.25
+			W(A)
+	R(B)
+	B:=B+200
+	W(B)
+			R(B)
+			B:=B+100
+			W(B)
+
+S1 v equivalent S2
+
+
+
+	- S belong Sch(C) is view-serializable if exists S0 belong to Sch(c), S0 serial, s.t. S view equivalent S0
+
+
+
+	T1	T2	T3		S1
+	R(A)
+		W(A)
+	W(A)
+			W(A)
+
+	
+	T1	T2	T3		S2
+	R(A)
+	W(A)
+		W(A)
+			W(A)
+
+Are S1 and S2 view qeuivalent? Yes.
+
+
+-recovability 
+
+	T1		T2
+300	R(A)
+	A:=A+200
+500	W(A)
+			R(A)
+			A:=A*100
+			W(A)
+			R(B)
+			B:=B*10
+			W(B)
+			commit - saved the changes in the database permanently, cant recover if T1 aborts
+	abort
+-this is unrecovarable
+
+S recoavble is T commits only after all transactions whoce changes T read commit 
+
+
+- cascadeless schedules -> reads only changes made b y commited transactions
+
+	T1	T2	T3
+	R(A)
+	W(A)
+		R(A)
+		W(A)
+			R(A)
+	Abort
+- thisn is not an example of cascedelss, because it should commit beofre T2 reads the value of A... so you just have to suspend T2 until T1 commits
+
+
+- locks, locking protocols
+	-lock: SLock (read, shared), XLock(write, exclusive)
+		
+(Me)Same as locking mechanisms, you can have multiple reads on an object, but only one write
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

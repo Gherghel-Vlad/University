@@ -1,0 +1,149 @@
+Use Case Diagram - UCD
+
+- use case diagrams allows us to describe the possible usage scenarios(use cases)
+that a system is developed
+
+Use cases
+	- a use case describes functionality expected from the system to be developed
+	- represented as an elipse(alternatively as a rectangle with a small elipse in the top right corner) 
+
+Actor
+	-entities that interact with the system
+	-represented as a stick figure or using the stereotype <<actor>>
+
+System boundary (subject):
+	Client(stick figure) ------  (place order (eclipse) ordering system(right top corner))(rectangle) ------ (stick figure) Banking system
+					(send offers of the day as push notifications)
+
+Relations:
+
+Asoscioations:
+-between actors and use case
+-can have <<initiate>> as stereotype to indicate the actor that initiates the comunication
+
+	Client(stick figure) ------(continous line, as before too)  place order (eclipse)
+
+
+	- Include
+		-between 2 use cases
+					|-----	(continous line) (Withdraw Money)---<<include>>---|>(dotted line)
+		APM Client (stick figure) ----(continous line) (Deposits Money)	--<<include>>-->(Validates card)
+					|-----(continous line) (Transfer Money)--<<include>>---|>
+
+	- Extend
+		-between 2 use cases
+
+	APM Client (stick figure) ----(continous line) (Deposits Money) <---<<extend>>--(dotted line) Check online help(eclipse)	
+
+
+- Generalisation:
+	-between actors or between use cases
+
+											--<<extend>>---> Check online help (eclipse)
+	APM Client(stick fiture) -----(continous line) Make ATM transaction (eclipse) ---<<include>>--> (dotted line) Card validation (eclipse)
+					>
+					|
+					|(continous line) (same for deposit money and transfer money)
+					|
+				Withdraw Money (eclipse)
+
+
+
+	Problem
+
+	A restaurant has many waiters and one cook. For each, the application opens a window. The waiters take orders from the clients
+and introduce them using their windows. An order contains the table number, the dishes and the quantity for each type of dish.
+After an order was introduced, it is sent to the cook where the list of orders is updated. The cook prepares the food, and after
+they are ready, he marks the corresponding order as finished. Automatically, this order appears as ready order in the waiters window
+(and maybe delivered), and is deleted from the list of the cook. Statistics are required such as finding out how many times a dish has been ordered.
+CRUD functionality is also required, atleast for dish types.
+
+
+	Employee(stick figure) ----------------------------(continous line) LOGIN(eclipse)<-----|<<include>>
+>>		>							>			|(dotted)
+||		|							|(dotted)<<include>>	|
+||		|(continous line)	|------(continous line)	View menu(eclipse)		|
+||		|			|				> <<extend>>		|
+||	Waiter(stick figure)------------------------------------|(cont.)| (dotted line)		|------------------------------------------------					
+>|								Take order(eclipse)-------------|						|
+|										  |-------------|--------------------------			|
+|(continous lines)    |----------------------------------------------------------(|)---------------------------------|   |			|
+|	Cook(stick figure)-------------------------------(cont) View orders(eclipse)  <---<<extend>>----(dotted) Finish order(eclipse)		|
+|								|(cont)				|------------------------------------------------
+|								|			Manage menu(eclipse)<--<<extend>>-Add dish(eclipse)
+|								|			  |   >	  	<<|--<<extend>>-Deleted dish
+	Admin(stick figure)-------------------------------------|-------------------------|   |<<ext>>  |---<<extend>>-Update a dish
+											      Count orders by dish type (eclipse)
+
+
+
+Use case description
+Name: Take order
+Actors: Waiter
+Standard process: 1. Click "Take order" 2. System shows new order window 4. Select dish 5 System add dish A to order.... 
+(normal scenario)
+Alternative processes: 5b. If dish A is not available, show error "Not available"
+Preconditions: user authenticated, is a waiter
+Postconditions: list of orders for the cook is updated
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+

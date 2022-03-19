@@ -1,0 +1,38 @@
+UML - Unified Modeling Language
+
+
+It s important that in projects involving many participants, often of different tehnical backgrounds to use notations that enable us to articulate complex ideas 
+succintly and precisely. 
+UML is a notation that has  the goal to provide the standard notation that can be used by all OO methods.
+
+
+System development focus on 3 different models of the system:
+1. Functional model -> use case diagrams
+2. object model -> class diagrams
+3. Dynamic model -> interaction diagrams - activity diagrams
+					 - comunication diagrams
+		 -> state machine diagrams 
+		 -> activity diagrams
+
+
+ 	USE CASE DIAGRAM
+
+ (Seminar1Picture.png)
+
+	CLASS DIAGRAM
+
+ (Seminar1Picture.png)
+
+	INTERACTIONS DIAGRAM
+ 
+ Sequence Diagram
+	 (Seminar1Picture.png)
+
+ Comunication Diagram
+	 (Seminar1Picture.png)
+
+ State machine Diagram
+	 (Seminar1Picture.png)
+
+ Activity Diagram
+	 (Seminar1Picture.png)

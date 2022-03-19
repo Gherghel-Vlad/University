@@ -1,0 +1,8 @@
+R1 - 4
+Install Prolog
+P1 - 14
+P2 - 13
+P3 -  4
+L1 -14
+L2 - 13
+L3 - 4 

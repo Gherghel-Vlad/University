@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="LocalMovieDatabase.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="AdministratorService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSVFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicVector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HTMLFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Movie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MoviesRepository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Validators.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AdministratorWindow.cpp" />
+    <ClCompile Include="UserWindow.cpp" />
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AddCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoRedoService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WatchListModel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="LocalMovieDatabase.h" />
+    <QtMoc Include="WatchListModel.h" />
+    <QtMoc Include="AdministratorWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="LocalMovieDatabase.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="LocalMovieDatabase.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{2074a4ea-d28f-4440-8d7a-ad85d5ed7b09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers Files">
+      <UniqueIdentifier>{dab44c9c-e4f4-4321-b08a-de5429e8ca6e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AdministratorService.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSVFile.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicVector.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HTMLFile.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Movie.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MoviesRepository.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserService.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Validators.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserWindow.h" />
+    <ClInclude Include="Command.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AddCommand.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteCommand.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateCommand.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoRedoService.h">
+      <Filter>Headers Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

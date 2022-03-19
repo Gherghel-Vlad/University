@@ -1,0 +1,217 @@
+Transactions and concurrency control:
+
+Transaction: 
+	- user-define unit of exection that has a list of one or several op. on a DB
+	- DB items
+	- ops/op.: read, write, commit, abort
+
+ACID:
+	- atomicity - all or nothing
+   T 	 	  			Values
+R(m)(reading mom s account) 		1000
+M:=M-100 		1000
+W(M)(write mom s account) 		900 -- what if failure after mom s account was debited
+R(A)					100
+A:=A+100				1000
+W(A) 					200
+....
+
+ DBMS ensures atomicity so that nothing bad happens in that case/correction of data in case of failure
+ - ensures consistency:
+		- each transaction perserves the consistency of the DB
+ - isolation
+		- trans. isolated from the effects of concurent schedule (?) other trans
+ - durability
+		- commited trans T - T's effects persist even if there s a crash before all changes in T have been propagated ot disk
+
+
+	Schedules:
+A=600
+B=400	
+
+	T1		T2
+	A=A-200		A=A*1.1
+	B=B+200		B=B*1.1
+Execute order: (T1T2) A = 440 B = 660 S1
+(T2T1) A= 460 B = 640	S2
+
+	T1 		T2 		S3 outcome of S1 (correct because it has one of the outcomes of the 2 correct ones (S1, S2))
+	A=A-200	 	
+	 		A=A*1.1
+	B=B+200 		
+			B=B*1.1
+(we execute concurrent for better performance, but  we need to be careful to allow the correct ones)
+
+	T1 		T2 		S4 incorrect  - leads to an inconsistent database
+	A=A-200	 			A = 440 B = 640
+	 		A=A*1.1	
+			B=B*1.1
+	B=B+200 	
+
+
+
+	T1 		T2 		
+	R(A)
+	W(A)
+			R(A)
+			W(A)
+			R(B)
+			W(A)
+	R(B)
+	W(B)
+
+	-schedule - list of ops (R/W/C/A) of a set of transactions s.t. the order of ops in each trans is preserved 
+		- serial schedules 
+		- non serial schedules
+	- T- set of transactions
+		Sch(T) - set of schedules for T
+		- schedule S in Sch(T) is SERIALIZABLE if - the effect of S on a consistent DB instane is identical to the effect of some serial schedule S0 from Sch(T)
+
+ 	Anomalies
+
+	- suppose we have T1 and T2 - R(I) - no conflict
+	- T1, T2 - R/W I1, I2 - separate data object, no conflict
+	- T1,T2 - same object I, atleast one W
+		- WR conflict 
+		- RW conflict 
+		- WW conflict 
+
+
+	Examples: - WR conflict:
+		
+		T1 		T2 		
+	R(A)
+	W(A)
+			R(A)		 - dirty read becase we are reading data that has yet to be commited - can lead to an inconsistent DB instance
+			W(A)
+			R(B)
+			W(A)
+			Commit
+	R(B)
+	W(B)
+	Commit 
+
+		
+		-RW conflict
+
+
+Values			T1		T2  -- unrepeatable read
+5		R(A)			
+5					R(A)
+10					W(A)
+					Commit
+10		R(A)
+		...
+		Commit
+
+		-WW conflict
+		JS, ES
+
+		T1: salaries - 6000 lei
+		T2: salaries - 5000 lei 
+		(T1T2) - salaries - 5000
+		(T2T1) - salaries - 6000
+
+
+	T1 	 T2	Values		- blind write
+	W(Js) 	 	JS : 6000
+		 W(ES)	ES: 5000
+	W(ES)	 	ES: 6000
+	Commit
+		W(JS)	JS: 5000
+		Commit
+
+	-  we got a lost update
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

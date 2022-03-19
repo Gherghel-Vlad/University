@@ -1,0 +1,40 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit, printf               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                  import printf msvcrt.dll                     ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13 00000000 01000000                        a dd 1
+    14 00000004 FEFFFFFF                        b dd -2
+    15 00000008 256400                          format_d db "%d", 0
+    16 0000000B 2564202B202564203D-             message db "%d + %d = %d", 0
+    16 00000014 20256400           
+    17                                          
+    18                                  
+    19                                  ; our code starts here
+    20                                  segment code use32 class=code
+    21                                      start:
+    22                                          ; Two natural numbers a and b (a, b: dword, defined in the data segment) are given. Calculate their sum and display the result in the following format: "<a> + <b> = <result>". Example: "1 + 2 = 3"
+    23                                          ;The values will be displayed in decimal format (base 10) with sign.
+    24                                          
+    25 00000000 A1[00000000]                    mov eax, [a]
+    26 00000005 0305[04000000]                  add eax, [b]
+    27                                          
+    28                                          ; int printf(const char * format, variable_1, constant_2, ...);
+    29                                          ; printf(message, a, b, eax)
+    30 0000000B 50                              push eax
+    31 0000000C FF35[04000000]                  push dword [b]
+    32 00000012 FF35[00000000]                  push dword [a]
+    33 00000018 68[0B000000]                    push dword message
+    34 0000001D FF15[00000000]                  call [printf]
+    35 00000023 83C410                          add esp, 4 * 4
+    36                                          
+    37                                          ; exit(0)
+    38 00000026 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    39 00000028 FF15[00000000]                  call    [exit]       ; call exit to terminate the program

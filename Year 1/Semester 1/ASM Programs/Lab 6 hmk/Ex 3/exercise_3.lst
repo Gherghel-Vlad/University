@@ -1,0 +1,99 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13                                      ; ...
+    14 00000000 0A09020704030C0B08-         sir dd 0702090Ah, 0B0C0304h, 05060108h
+    14 00000009 010605             
+    15                                      len EQU ($-sir)/2
+    16 0000000C <res 00000006>              result RESB 6
+    17                                  
+    18                                  ; our code starts here
+    19                                  segment code use32 class=code
+    20                                      start:
+    21                                          ; An array of doublewords, where each doubleword contains 2 values on a word (unpacked, so each nibble is preceded by a 0) is given. Write an asm program to create a new array of bytes which contain those va
+    22                                  
+    23 00000000 BA00000000                      mov edx, 0 ; i will use it to increment trough the result string
+    24 00000005 BE[00000000]                    mov esi, sir
+    25 0000000A B906000000                      mov ecx, len
+    26                                         
+    27 0000000F E313                            jecxz NoDWords
+    28                                          Repeta1:
+    29 00000011 66AD                                LODSW
+    30 00000013 88C3                                mov bl, al ; saving the low part
+    31                                              ; I am gonna shift to the right by 4 bits so that the number from the high part will be on the second byte of the low part
+    32 00000015 66C1E804                            shr ax, 4 ; the shifting
+    33 00000019 00D8                                add al, bl ; now in AL i should have the 2 values packed
+    34 0000001B 8882[0C000000]                      mov [result + edx], al ; saving the byte in my result string
+    35 00000021 42                                  inc edx ; going to the enxt position in my result string
+    36                                          
+    37 00000022 E2ED                            loop Repeta1
+    38                                          
+    39                                          NoDWords:
+    40                                          
+    41                                          ; now i will order the string in an ascending order
+    42                                  
+    43                                          
+    44 00000024 BB00000000                      mov ebx, 0 ; this will show us which byte we will take for comparision with all the other ones
+    45 00000029 BE[0C000000]                    mov esi, result
+    46 0000002E BA01000000                      mov edx, 1 ; i will use this one to go trough the result string ( will show the element with whom i will compare the esi one)
+    47                                          
+    48                                          NotFinished:
+    49                                          
+    50 00000033 89DA                            mov edx, ebx
+    51 00000035 83C201                          add edx, 1
+    52                                          
+    53                                          ContinueComparing:
+    54 00000038 BF[0C000000]                    mov edi, result
+    55 0000003D 01DF                            add edi, ebx ; EDI will have the adress of the element with whom i compare all the others from the array with
+    56                                          
+    57 0000003F BE[0C000000]                    mov esi, result
+    58 00000044 01DE                            add esi, ebx
+    59 00000046 AC                              LODSB ; loads in AL the byte for which we are going to look for it s position in the string array
+    60                                          
+    61 00000047 3A82[0C000000]                  cmp al, [result + edx]
+    62 0000004D 7C13                            jl DontInterchange ; wont interchange if the first value is greater than the next ones
+    63 0000004F BE[0C000000]                        mov esi, result
+    64 00000054 01D6                                add esi, edx ; esi will now have the address of the value that s lesser than AL
+    65                                              
+    66 00000056 88C4                                mov ah, al ; AH will be my auxialiary that i will use in interchanging
+    67                                              
+    68 00000058 AC                                  LODSB ; AL = the value lesser than what is in AH
+    69                                              
+    70 00000059 AA                                  STOSB ; EDI will take the value from AL
+    71                                              
+    72 0000005A 66C1C808                            ror ax, 8 ; AL will now have the greater one
+    73                                              
+    74 0000005E 89F7                                mov edi, esi
+    75 00000060 4F                                  dec edi ; lodsb increments with 1 esi, and i dont want that
+    76 00000061 AA                                  STOSB ; EDI will take the value from AL
+    77                                              
+    78                                          DontInterchange:
+    79 00000062 42                              inc edx
+    80                                          
+    81 00000063 B906000000                      mov ecx, len
+    82 00000068 49                              dec ecx
+    83 00000069 39CA                            cmp edx, ecx 
+    84 0000006B 7ECB                            jle ContinueComparing ; As long as there are variables to comapre with
+    85 0000006D 43                              inc ebx
+    86                                          
+    87 0000006E B906000000                      mov ecx, len
+    88 00000073 49                              dec ecx
+    89 00000074 39CB                            cmp ebx, ecx
+    90 00000076 7CBB                            jl NotFinished ; If there are still positions left that arent checked 
+    91                                          
+    92                                          
+    93                                          ; Thanks God it works!
+    94                                          
+    95                                          
+    96                                          ; exit(0)
+    97 00000078 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    98 0000007A FF15[00000000]                  call    [exit]       ; call exit to terminate the program

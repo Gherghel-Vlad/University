@@ -1,0 +1,106 @@
+13. a
+
+
+removeCons(l1l2l3...ln)= 	[], n==0
+				[l1], n==1
+				[], n==2 and l2 == l1+1
+				[l1,l2], n==2 and l2!=l1+1
+				l1 U removeCons(l2l3...ln), l2 != l1+1
+				removeCons(l2l3...ln), l2 == l1+1 and l3=l2+1
+				removeCons(l3...ln), l2==l1+1 and l3!=l2+1
+% Given a linear numerical list write a predicate to remove all sequences of consecutive values. 
+% Eg.: remove([1, 2, 4, 6, 7, 8, 10], L) will produce L=[4, 10].
+
+% removeCons(L: list, Res: list)
+% flow: (i, i), (i, o)
+% L - the list given
+% Res- the result list with no consecutive sequences from the original list
+
+
+removeCons([], []):- !.
+removeCons([A], A):- !.
+removeCons([H1, H2], []):- H2=:=H1+1, !.
+removeCons([H1, H2], [H1, H2]):- H2=\=H1+1, !.
+removeCons([H1, H2|T], [H1|Res]):-
+    H2 =\= H1+1,
+    !,
+    removeCons([H2|T], Res).
+removeCons([H1, H2, H3|T], Res):-
+    H2=:= H1+1,
+    H3=\= H2+1,
+    !,
+    removeCons([H3|T], Res).
+removeCons([H1, H2, H3 |T], Res):-
+    H2=:= H1+1,
+    H3=:= H2+1,
+    !,
+    removeCons([H2, H3|T], Res).
+
+
+
+b.
+
+% For a heterogeneous list, formed from integer numbers and list of numbers; 
+% write a predicate to delete from every sublist all sequences of consecutive values.
+% Eg.: [1, [2, 3, 5], 9, [1, 2, 4, 3, 4, 5, 7, 9], 11, [5, 8, 2], 7] =>[1, [5], 9, [4, 7, 9], 11, [5, 8, 2], 7]   
+
+
+removeFromSublistsConsSeq(l1l2...ln)=   [], n =0
+					removeCons(l1) + removeFromSublistsConsSeq(l2l3...ln), l1 is list
+					removeFromSublistsConsSeq(l2l3...ln) otherwise
+
+
+
+
+
+% removeCons(L: list, Res: list)
+% flow: (i, i), (i, o)
+% L - the list given
+% Res- the result list with no consecutive sequences from the original list
+
+
+removeCons([], []):- !.
+removeCons([A], A):- !.
+removeCons([H1, H2], []):- H2=:=H1+1, !.
+removeCons([H1, H2], [H1, H2]):- H2=\=H1+1, !.
+removeCons([H1, H2|T], [H1|Res]):-
+    H2 =\= H1+1,
+    !,
+    removeCons([H2|T], Res).
+removeCons([H1, H2, H3|T], Res):-
+    H2=:= H1+1,
+    H3=\= H2+1,
+    !,
+    removeCons([H3|T], Res).
+removeCons([H1, H2, H3 |T], Res):-
+    H2=:= H1+1,
+    H3=:= H2+1,
+    !,
+    removeCons([H2, H3|T], Res).
+    
+    
+% removeFromSublistsConsSeq(L: list, Res: list)
+% flow model: removeFromSublistsConsSeq(i, i), removeFromSublistsConsSeq(i, o)
+% L - list given
+% Res - list after removing from each sublist the consecutive subsequences
+
+removeFromSublistsConsSeq([],[]):- !.
+removeFromSublistsConsSeq([H|T], [R|Res]):-
+    is_list(H),
+    !,
+    removeCons(H,R),
+    removeFromSublistsConsSeq(T, Res).
+removeFromSublistsConsSeq([H|T], [H|Res]):-
+    removeFromSublistsConsSeq(T, Res).
+
+
+
+
+
+
+
+
+
+
+
+

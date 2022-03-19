@@ -1,0 +1,10 @@
+The Dark Knight;Dark Action;2009;100000;https://www.youtube.com/watch?v=EXeTwQWrcwY&ab_channel=MovieclipsClassicTrailers
+Joker;Dark;2019;90000;https://www.youtube.com/watch?v=-_DJEzZk2pc&ab_channel=FTZ
+Forrest Gump;Heart warming;1994;1000000;https://www.youtube.com/watch?v=bLvqoHBptjg&ab_channel=ParamountMovies
+The Green Mile;Beautiful;1999;1010000;https://www.youtube.com/watch?v=Ki4haFrqSrw&ab_channel=MovieclipsClassicTrailers
+Zack Snyder's Justice League;Superhero;2021;500000;https://www.youtube.com/watch?v=vM-Bja2Gy04&ab_channel=HBOMax
+Léon: The Professional;Action;1994;1000000;https://www.youtube.com/watch?v=jawVxq1Iyl0&ab_channel=MovieclipsClassicTrailers
+The Shawshank Redemption;Drama;1994;43251;https://www.youtube.com/watch?v=6hB3S9bIaco&ab_channel=ryy79
+Fight Club;Drama;1999;432553;https://www.youtube.com/watch?v=qtRKdVHc-cE&ab_channel=MovieclipsClassicTrailers
+Inception;Action;2010;548483;https://www.youtube.com/watch?v=YoHD9XEInc0&ab_channel=MovieclipsClassicTrailers
+The Matrix;Sci-Fi, Action;1999;800000;https://www.youtube.com/watch?v=vKQi3bBA1y8&ab_channel=MovieclipsClassicTrailers

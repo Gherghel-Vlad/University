@@ -1,0 +1,82 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13                                      ; a,b,d-byte; c-doubleword; x-qword
+    14 00000000 96                          a db 150
+    15 00000001 C8                          b db 200
+    16 00000002 FA                          d db 250
+    17 00000003 00093D00                    c dd 4000000
+    18 00000007 A086010000000000            x dq 100000
+    19 0000000F <res 00000008>              result RESQ 1
+    20                                  
+    21                                  ; our code starts here
+    22                                  segment code use32 class=code
+    23                                      start:
+    24                                          ; (8-a*b*100+c)/d+x = (8 - 150*200*100 + 4000000)/250 + 100000 = (8 - 3.000.000 +4.000.000)/250 +100000 =1.000.008/250 + 100.000=  
+    25                                          ; =4000 r 8 + 100.000 = 104.000 r 8
+    26                                         
+    27                                          ; Because of 8-a*b*100 i will have to select specific numbers to be able to do unsigned representation : /
+    28                                          ; I will assume c+8 > a*b*100 or else it wont be unsigned anymore
+    29                                          
+    30 00000000 A0[00000000]                    mov al, [a]
+    31 00000005 F625[01000000]                  mul byte [b]
+    32                                          ; AX = a*b
+    33                                          
+    34 0000000B 66BB6400                        mov bx, 100
+    35 0000000F 66F7E3                          mul bx
+    36                                          ; DX:AX = a*b*100
+    37                                          
+    38 00000012 6652                            push dx
+    39 00000014 6650                            push ax
+    40 00000016 59                              pop ecx
+    41                                          ; ECX = DX:AX
+    42                                      
+    43 00000017 BB08000000                      mov ebx, 8
+    44 0000001C 031D[03000000]                  add ebx, [c]
+    45                                          ; EBX = 8+c
+    46                                          
+    47 00000022 29CB                            sub ebx, ecx
+    48                                          ; EBX = 8-a*b*100+c
+    49                                          
+    50 00000024 A0[02000000]                    mov al, [d]
+    51 00000029 B400                            mov ah, 0
+    52                                          ; conversion of d (byte) in AX (word)
+    53                                          
+    54 0000002B 6689C1                          mov cx, ax
+    55 0000002E 53                              push ebx
+    56 0000002F 6658                            pop ax
+    57 00000031 665A                            pop dx
+    58 00000033 66F7F1                          div cx
+    59                                          ; AX = (8-a*b*100+c)/d DX = (8-a*b*100+c)%d
+    60                                          
+    61                                          ; I wont care about the remainder from now on
+    62                                          
+    63 00000036 6689C1                          mov cx, ax
+    64 00000039 B800000000                      mov eax, 0
+    65 0000003E 6689C8                          mov ax, cx
+    66 00000041 BA00000000                      mov edx, 0
+    67                                          ; unsigned conversion from AX (word) to EDX:EAX (qword)
+    68                                          
+    69 00000046 0305[07000000]                  add eax, dword [x+0]
+    70 0000004C 1315[0B000000]                  adc edx, dword [x+4]
+    71                                          ; EDX:EAX = (8-a*b*100+c)/d+x
+    72                                          
+    73 00000052 A3[0F000000]                    mov [result+0], eax
+    74 00000057 8915[13000000]                  mov [result+4], edx
+    75                                          
+    76                                          
+    77                                      
+    78                                      
+    79                                      
+    80                                          ; exit(0)
+    81 0000005D 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    82 0000005F FF15[00000000]                  call    [exit]       ; call exit to terminate the program

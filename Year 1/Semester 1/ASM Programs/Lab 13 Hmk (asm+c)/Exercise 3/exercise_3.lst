@@ -1,0 +1,86 @@
+     1                                  bits 32 
+     2                                  
+     3                                  global _concatDecimals
+     4                                  
+     5                                  
+     6                                  segment data public data use32
+     7 00000000 00000000                    resultStringAddress dd 0
+     8 00000004 00000000                    firstStringAddress dd 0
+     9 00000008 00000000                    secondStringAddress dd 0
+    10                                  
+    11                                  
+    12                                  segment code public code use32
+    13                                      ; function will concatinate the decimals from one string to the decimal of the other string
+    14                                      ; concatDecimals(char result_string, char first_string, char second_string)
+    15                                      _concatDecimals:
+    16                                          ; creating the new stack frame
+    17 00000000 55                              push ebp
+    18 00000001 89E5                            mov ebp, esp
+    19                                          ; saving the registers (i might change quite a lot and C compiler might not like it)
+    20                                          ; pushad
+    21                                          ; on dword [ebp] I have the ebp value of the caller
+    22                                          ; on dword [ebp+4] i have the return value
+    23                                          ; that means on ebp+8 i have second_string, ebp+12 first_string, ebp+16 result_string
+    24                                          ; i will save the addresses in variables so it s easier for me to work with them
+    25 00000003 8B4508                          mov eax, [ebp+8]
+    26 00000006 A3[00000000]                    mov [resultStringAddress], eax
+    27 0000000B 8B450C                          mov eax, [ebp+12]
+    28 0000000E A3[04000000]                    mov [firstStringAddress], eax
+    29 00000013 8B4510                          mov eax, [ebp+16]
+    30 00000016 A3[08000000]                    mov [secondStringAddress], eax
+    31                                          
+    32                                          ; going trough the first string and concatinating the decimal values to the result string
+    33 0000001B 8B3D[00000000]                  mov edi, [resultStringAddress]
+    34 00000021 8B35[04000000]                  mov esi, [firstStringAddress]
+    35                                          repeat1:
+    36 00000027 AC                                  lodsb
+    37                                              
+    38 00000028 3C30                                cmp al, '0'
+    39 0000002A 7205                                jb NotDigit1
+    40 0000002C 3C39                                cmp al, '9'
+    41 0000002E 7701                                ja NotDigit1
+    42                                              
+    43                                              ;if it came here, that means it s a digit
+    44 00000030 A4                                  movsb
+    45                                              
+    46                                          
+    47                                              NotDigit1:
+    48                                              
+    49 00000031 3C00                                cmp al, 0
+    50 00000033 EB02                                jmp Done1
+    51                                              
+    52                                              
+    53 00000035 EBF0                            jmp repeat1
+    54                                          Done1:
+    55                                          
+    56                                          ; doing the same for the second string
+    57 00000037 8B35[08000000]                  mov esi, [secondStringAddress]
+    58                                          repeat2:
+    59 0000003D AC                                  lodsb
+    60                                              
+    61 0000003E 3C30                                cmp al, '0'
+    62 00000040 7205                                jb NotDigit2
+    63 00000042 3C39                                cmp al, '9'
+    64 00000044 7701                                ja NotDigit2
+    65                                              
+    66                                              ;if it came here, that means it s a digit
+    67 00000046 A4                                  movsb
+    68                                              
+    69                                              
+    70                                          
+    71                                              NotDigit2:
+    72                                              
+    73 00000047 3C00                                cmp al, 0
+    74 00000049 EB02                                jmp Done2
+    75                                              
+    76 0000004B EBF0                            jmp repeat2
+    77                                          
+    78                                          Done2:
+    79                                          ; restoring the registers
+    80                                          ; popad
+    81                                          ; restoring the stack frame
+    82 0000004D 89EC                            mov esp, ebp
+    83 0000004F 5D                              pop ebp
+    84                                          
+    85 00000050 C3                              ret
+    86                                          

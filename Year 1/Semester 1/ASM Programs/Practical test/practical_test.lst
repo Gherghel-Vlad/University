@@ -1,0 +1,160 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit, fopen, fclose, fread, printf, fscanf, scanf            ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll
+     9                                  import fopen msvcrt.dll
+    10                                  import fread msvcrt.dll
+    11                                  import printf msvcrt.dll
+    12                                  import fscanf msvcrt.dll
+    13                                  import scanf msvcrt.dll
+    14                                  import fclose msvcrt.dll 
+    15                                  
+    16                                  ; our data is declared here (the variables needed by our program)
+    17                                  segment data use32 class=data
+    18 00000000 637576696E74652E74-         file_name db "cuvinte.txt", 0
+    18 00000009 787400             
+    19 0000000C 7200                        read_access db "r", 0
+    20 0000000E FFFFFFFF                    file_descriptor dd -1
+    21                                      
+    22 00000012 4C203D2000                  text db "L = ", 0
+    23                                      
+    24 00000017 4E6F20776F72647320-         text_for_empty_case db "No words with the length an odd number and smaller than L exist in that file.", 0
+    24 00000020 776974682074686520-
+    24 00000029 6C656E67746820616E-
+    24 00000032 206F6464206E756D62-
+    24 0000003B 657220616E6420736D-
+    24 00000044 616C6C657220746861-
+    24 0000004D 6E204C206578697374-
+    24 00000056 20696E207468617420-
+    24 0000005F 66696C652E00       
+    25 00000065 00000000                    check_digit_for_empty_case dd 0 ; 0 - False, it didnt found any words, 1 - True, it found words
+    26                                      
+    27 00000069 FFFFFFFF                    maximum_length dd -1 ; this is L
+    28 0000006D <res 00000032>              current_word resb 50
+    29 0000009F 257300                      read_format_string db "%s", 0
+    30 000000A2 256400                      read_format_number db "%d", 0
+    31 000000A5 25732000                    write_format db "%s ", 0
+    32                                      
+    33                                      
+    34                                  
+    35                                  ; our code starts here
+    36                                  segment code use32 class=code
+    37                                      start:
+    38                                          ; opening the file
+    39 00000000 68[0C000000]                    push dword read_access
+    40 00000005 68[00000000]                    push dword file_name
+    41 0000000A FF15[00000000]                  call [fopen]
+    42 00000010 83C408                          add esp, 4*2
+    43                                          
+    44 00000013 A3[0E000000]                    mov [file_descriptor], eax
+    45                                          
+    46                                          ; checking if the file was opened succesfully
+    47 00000018 83F800                          cmp eax, 0
+    48 0000001B 0F84BF000000                    jz final
+    49                                          
+    50                                          ; printing the message before reading L
+    51 00000021 68[12000000]                    push dword text
+    52 00000026 FF15[00000000]                  call [printf]
+    53 0000002C 83C404                          add esp, 4
+    54                                          
+    55                                          ; reading the L (maximum length of a word)
+    56                                          ;int scanf(const char *format, ...)
+    57 0000002F 68[69000000]                    push dword maximum_length
+    58 00000034 68[A2000000]                    push dword read_format_number
+    59 00000039 FF15[00000000]                  call [scanf]
+    60 0000003F 83C408                          add esp, 4*2
+    61                                          
+    62                                          repeat1:
+    63                                              
+    64                                              ; reading a word
+    65                                              ; int fscanf(FILE *stream, const char *format, ...)
+    66 00000042 68[6D000000]                        push dword current_word
+    67 00000047 68[9F000000]                        push dword read_format_string
+    68 0000004C FF35[0E000000]                      push dword [file_descriptor]
+    69 00000052 FF15[00000000]                      call [fscanf]
+    70 00000058 83C40C                              add esp, 4*3
+    71                                              
+    72 0000005B 83F8FF                              cmp eax, -1 ; checking if i reached the end of the file
+    73 0000005E 7456                                je done
+    74                                              
+    75                                              ; calculating the length of the word
+    76 00000060 BB00000000                          mov ebx, 0 ; ebx will show the length of the current word
+    77                                              
+    78 00000065 FC                                  cld ; clearing the direction flag
+    79 00000066 BE[6D000000]                        mov esi, current_word
+    80                                              
+    81                                              repeat2:
+    82 0000006B AC                                      lodsb
+    83                                                  
+    84 0000006C 3C00                                    cmp al, 0 ; if it reached the end of the word
+    85 0000006E 740A                                    je DoneCountingTheLength
+    86                                                  
+    87 00000070 43                                      inc ebx 
+    88                                              
+    89 00000071 EBF8                                jmp repeat2
+    90                                              
+    91                                              ; adding the 0 at the end of the word
+    92 00000073 C683[6D000000]00                    mov byte [current_word + ebx], 0
+    93                                              
+    94                                              DoneCountingTheLength:
+    95                                              ; ebx will have my current word's length
+    96                                              
+    97                                              ; checking if it s an odd number
+    98 0000007A 6689D8                              mov ax, bx ; preparing the DX:AX value to be printed
+    99 0000007D 66BA0000                            mov dx, 0 
+   100 00000081 66B90200                            mov cx, 2
+   101 00000085 66F7F1                              div cx
+   102                                              
+   103 00000088 6683FA01                            cmp dx, 1 
+   104 0000008C 7526                                jne NotAGoodWord
+   105                                              
+   106                                              ; if it reached here it means the length of the word is an odd number
+   107                                              ; checking if it s smaler than L
+   108 0000008E 3B1D[69000000]                      cmp ebx, dword [maximum_length]
+   109 00000094 7D1E                                jnl NotAGoodWord
+   110                                              
+   111                                              ; if it reached here it means that the word is correct and needs to be printed on the screen
+   112 00000096 68[6D000000]                        push dword current_word
+   113 0000009B 68[A5000000]                        push dword write_format
+   114 000000A0 FF15[00000000]                      call [printf]
+   115 000000A6 83C408                              add esp, 4*2
+   116                                              
+   117                                              ; making the check digit True 
+   118 000000A9 B901000000                          mov ecx, 1
+   119 000000AE 890D[65000000]                      mov [check_digit_for_empty_case], ecx
+   120                                              
+   121                                              NotAGoodWord:
+   122                                              
+   123                                          
+   124 000000B4 EB8C                            jmp repeat1
+   125                                          
+   126                                          done:
+   127                                          
+   128 000000B6 BB00000000                      mov ebx, 0
+   129 000000BB 391D[65000000]                  cmp dword [check_digit_for_empty_case], ebx
+   130 000000C1 750E                            jne closefile
+   131                                          
+   132 000000C3 68[17000000]                    push dword text_for_empty_case
+   133 000000C8 FF15[00000000]                  call [printf]
+   134 000000CE 83C404                          add esp, 4
+   135                                          
+   136                                          
+   137                                          closefile:
+   138                                          
+   139                                          ; closing the file
+   140 000000D1 FF35[0E000000]                  push dword [file_descriptor]
+   141 000000D7 FF15[00000000]                  call [fclose]
+   142 000000DD 83C404                          add esp, 4
+   143                                          
+   144                                          
+   145                                          
+   146                                          final:
+   147                                          
+   148                                      
+   149                                          ; exit(0)
+   150 000000E0 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+   151 000000E2 FF15[00000000]                  call    [exit]       ; call exit to terminate the program

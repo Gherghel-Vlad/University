@@ -1,0 +1,74 @@
+ideea on what theta might be
+H0 null hypothesis - takes into account the past
+H1 - alternative hyp. - the "new" thing
+
+H0 vs H1
+
+Regarding vocabulary
+accept H0
+or
+reject H0
+		in favor H1
+
+
+Technically: 
+Choose a simple H0,
+then H1 can be chosen from the following: (theta0 is usually given)
+	H0 : theta = theta0
+	H1: - theta < theta0 (left-tailed test)
+	    - theta > theta0 (right-tailed test)
+	    - theta =/= theta0 (two-tailed test)
+
+
+alpha in (0, 1) - significance level
+	usually: 1%, 5%, 10%
+TS - test statistic 
+TS0 - TS when your unknown variable is replaced with your known variable (theta = theta0)
+	- observed value of TS
+	- is a number
+RR - rejection region 
+	- has all the values of TS for which we reject H0
+P - value - the critical of the test
+	- minimum threshold for rejection
+
+Hypothesis testing:
+if TS0 belongs to RR reject H0
+  else (TS0 doesn't belong to RR) do not reject H0
+
+
+
+WE REQUEST: PRINT the follwing quantaties  TS0, RR, P-value
+
+% INPUT
+% X - the vector that contains your data
+% M - test value (theta0 (in our case is niu (9)))
+% SIGMA - standard deviation for the population 
+% ALPHA - significance level 
+% TAIL - indicates the type of the test
+
+% OUTPUT
+% H - tells us if we reject H0 or not
+% P - P-value of the test (we shall print it at the end)
+% CI - confidence interval
+% ZVAL - observed value of TS (TS0 - we shall print it)
+
+[H,P,CI,ZVAL] = ztest(X,M,SIGMA,ALPHA,TAIL)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

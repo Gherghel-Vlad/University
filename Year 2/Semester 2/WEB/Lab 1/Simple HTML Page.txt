@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1> Welcome to my art collection page !!</h1>
+
+<div>
+<p>One of my hobbies is to collect art,<br> all types of art (even though you will observe that i do like a certain type of art).</p>
+</div>
+
+
+</body>
+</html>

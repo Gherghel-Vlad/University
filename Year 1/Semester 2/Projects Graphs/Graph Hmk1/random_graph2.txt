@@ -1,0 +1,3 @@
+ 5.2. random_graph2.txt - a graph with  6 vertices and  40 edges
+
+A graph like that cannot be made.

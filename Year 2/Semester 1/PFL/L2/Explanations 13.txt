@@ -1,0 +1,76 @@
+13. For agiven tree of type (2) return the path from the root node to a certain given node X.
+
+appears(l1l2...ln, e)= False, n=0
+				True, l1=e
+				appears(l1, e) or appears(l2l3...), l1 list
+				appears(l2l3...ln, e), otherwise
+		A
+	B		C
+		      E	   E
+		F
+	     Y	   u
+		 D
+
+(DEFUN appears(l e)
+(COND 
+    ((null l) nil)
+    ((EQUAL (CAR l) e) T)
+    (T (OR (appears (CADR l) e) (appears (CADDR l) e)))
+)
+)
+
+;(print (appears '(A (B) (C (D) (E))) 'D))
+
+
+path_aux(l1l2l3, e)= [], n=0
+		(first element of l2) U path(l2), appears(l2, e)=T
+		(first element of l3) U path(l3), appears(l3, e)=T	
+
+
+path(l1l2l3, e)= nil,  n=0
+		nil, e not in l1l2l3
+		l1 U path_aux(l1l2l3, e), otherwise
+	
+
+FULL PROGRAM: 
+
+(DEFUN appears(l e)
+(COND 
+    ((null l) nil)
+    ((EQUAL (CAR l) e) T)
+    (T (OR (appears (CADR l) e) (appears (CADDR l) e)))
+)
+)
+
+;(print (appears '(A (B) (C (D) (E))) 'D))
+
+
+(DEFUN path_aux(l e)
+(COND
+    ((NULL l) ())
+    ((appears (CADR l) e) (CONS (FIRST (CADR l)) (path_aux (CADR l) e)))
+    ((appears (CADDR l) e) (CONS (FIRST (CADDR l)) (path_aux (CADDR l) e)))
+    (T nil)
+)
+)
+
+;(print (path_aux '(A (B) (C (E (F (Y) (U (D)))) (E))) 'D))
+
+
+(DEFUN path(l e)
+(COND
+    ((NULL l) nil)
+    ((NOT (appears l e)) nil)
+    (T (CONS (CAR l) (path_aux l e)))
+)
+)
+(print (path '(A (B) (C (E (F (Y) (U (D)))) (E))) 'D))
+(print (path '() 'D))
+
+
+
+
+
+
+
+

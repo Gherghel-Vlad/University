@@ -1,0 +1,23 @@
+#include <winsock.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <string.h>
+#include <time.h> 
+#include <Windows.h>
+
+
+
+#pragma comment(lib,"WS2_32")
+
+
+
+int main() {
+	WSADATA wsaData;
+	int iResult;
+
+	// Initialize Winsock
+	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != 0) {
+		printf("WSAStartup failed: %d\n", iResult);
+		return 1;
+	}

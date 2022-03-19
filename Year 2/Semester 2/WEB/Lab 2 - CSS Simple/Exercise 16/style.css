@@ -1,0 +1,52 @@
+
+.main-menu-container {
+    width: 14em;
+    background-color: lightsteelblue;
+}
+
+.main-menu-item {
+    display:block;
+}
+
+.side-menu {
+    display: none;
+    position: absolute;
+    margin-left: 14em;
+    margin-top: -4.35em;
+}
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Text format */
+.main-menu-text-format {
+    font-size: 22px;
+    font-family: 'Times New Roman';
+    text-align: left;
+    display: block;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.main-menu-item:hover .side-menu {
+    display: block;
+    position: absolute;
+    background-color: lightgrey;
+}
+
+.side-menu:hover {
+    display: block;
+    position: absolute;
+    background-color: lightgrey;
+}
+
+.side-menu-text-format {
+    font-size: 17px;
+    font-family: 'Times New Roman';
+    text-align: left;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}

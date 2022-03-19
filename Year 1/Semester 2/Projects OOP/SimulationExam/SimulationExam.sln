@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimulationExam", "SimulationExam\SimulationExam.vcxproj", "{3DCAC4AE-7404-42CE-8642-790E525D77E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3DCAC4AE-7404-42CE-8642-790E525D77E7}.Debug|x64.ActiveCfg = Debug|x64
+		{3DCAC4AE-7404-42CE-8642-790E525D77E7}.Debug|x64.Build.0 = Debug|x64
+		{3DCAC4AE-7404-42CE-8642-790E525D77E7}.Release|x64.ActiveCfg = Release|x64
+		{3DCAC4AE-7404-42CE-8642-790E525D77E7}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D55AAD7-E49D-4507-B800-2E1298091EEF}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,70 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13 00000000 640005000100FF7FDB-         A dw 100, 5, 1, 32767, 5339
+    13 00000009 14                 
+    14                                      lenA equ $-A
+    15 0000000A 0200640037001027            B dw 2, 100, 55, 10000
+    16                                      lenB equ $-B
+    17 00000012 <res 00000028>              C resw 20
+    18 0000003A 0000                        result_function dw 0
+    19                                      
+    20 0000003C 257500                      print_format db "%u", 0
+    21                                      
+    22                                      
+    23                                  ; our code starts here
+    24                                  segment code use32 class=code
+    25                                      start:
+    26 00000000 BB00000000                      mov ebx, 0; iterator for the A array
+    27                                          
+    28                                          repeat1:
+    29 00000005 83FB0A                              cmp ebx, lenA
+    30 00000008 772B                                ja done ;i am done when the iterator is bigger than the number of elements in A
+    31                                              
+    32 0000000A 668B93[00000000]                    mov dx, [A + ebx] ; get the element from the A array
+    33 00000011 60                                  pushad
+    34                                              ; call the function
+    35                                              
+    36                                              ; i will assume that the result will be in eax and it s represented on a word
+    37 00000012 66B80400                            mov ax, 4
+    38 00000016 66A3[3A000000]                      mov [result_function], ax
+    39 0000001C 61                                  popad
+    40                                              
+    41 0000001D 668B0D[3A000000]                    mov cx, [result_function]
+    42 00000024 66D3EA                              shr dx, cl
+    43 00000027 66D3E2                              shl dx, cl ; making the X (in out case AX) lower bits 0
+    44                                              
+    45 0000002A 668993[12000000]                    mov [C + ebx], dx ; saving the number
+    46                                              
+    47 00000031 43                                  inc ebx 
+    48 00000032 43                                  inc ebx ; incrementing the iterator
+    49                                          
+    50 00000033 EBD0                            jmp repeat1
+    51                                          done:
+    52                                          
+    53                                          
+    54                                          
+    55                                          
+    56                                          
+    57                                          
+    58                                          
+    59                                      
+    60                                      
+    61                                      
+    62                                      
+    63                                      
+    64                                      
+    65                                      
+    66                                      
+    67                                          ; exit(0)
+    68 00000035 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    69 00000037 FF15[00000000]                  call    [exit]       ; call exit to terminate the program

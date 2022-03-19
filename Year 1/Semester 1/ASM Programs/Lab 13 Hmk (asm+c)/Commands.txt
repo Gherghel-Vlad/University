@@ -1,0 +1,6 @@
+nasm exercise_3.asm -fwin32 -g -o exercise_3.obj
+cl /Z7 MainProgram.c /link exercise_3.obj
+
+nasm exercise_18.asm -fwin32 -g -o exercise_18.obj
+cl /Z7 MainProgram.c /link exercise_18.obj
+

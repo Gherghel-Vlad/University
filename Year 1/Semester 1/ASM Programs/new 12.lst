@@ -1,0 +1,40 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13 00000000 4401                        a dw 324
+    14                                      l_a EQU $-a
+    15 00000002 <res 00000002>              r RESW 1
+    16                                  
+    17                                  ; our code starts here
+    18                                  segment code use32 class=code
+    19                                      start:
+    20                                          
+    21 00000000 B902000000                      mov ecx, l_a
+    22 00000005 BA00000000                      mov edx, 0 ; my result
+    23 0000000A 66A1[00000000]                  mov ax, [a]
+    24 00000010 E308                            jecxz EndLoop
+    25                                          Repeta:
+    26 00000012 B10A                                mov cl, 10
+    27 00000014 F6F1                                div cl ; AL = AX/10 AH= AX%10
+    28                                              add edx, ah
+    28          ******************       error: invalid combination of opcode and operands
+    29 00000016 B400                                mov ah, 0
+    30                                          
+    31 00000018 E2F8                            loop Repeta
+    32                                          
+    33                                          
+    34                                          EndLoop:
+    35                                          
+    36                                      
+    37                                          ; exit(0)
+    38 0000001A 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    39 0000001C FF15[00000000]                  call    [exit]       ; call exit to terminate the program

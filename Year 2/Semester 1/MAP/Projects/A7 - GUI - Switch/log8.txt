@@ -1,0 +1,295 @@
+ExeStack:
+(Ref(int) v;(new(v. 20);(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5)))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ Ref(int) v
+(new(v. 20);(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ Ref(int) v
+(new(v. 20);(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(v. 20);(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5))))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(v. 20);(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5))))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(v. 20)
+(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5)))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(v. 20)
+(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5)))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5)))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(print(rHExp(v));(wHStmt(v. 30);print(rHExp(v)+5)))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ print(rHExp(v))
+(wHStmt(v. 30);print(rHExp(v)+5))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ print(rHExp(v))
+(wHStmt(v. 30);print(rHExp(v)+5))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(wHStmt(v. 30);print(rHExp(v)+5))
+SymTable:
+v --> 1.int
+Out:
+20
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(wHStmt(v. 30);print(rHExp(v)+5))
+SymTable:
+v --> 1.int
+Out:
+20
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ wHStmt(v. 30)
+print(rHExp(v)+5)
+SymTable:
+v --> 1.int
+Out:
+20
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ wHStmt(v. 30)
+print(rHExp(v)+5)
+SymTable:
+v --> 1.int
+Out:
+20
+FileTable:
+
+Heap:
+1 --> 20
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+print(rHExp(v)+5)
+SymTable:
+v --> 1.int
+Out:
+20
+FileTable:
+
+Heap:
+1 --> 30
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+print(rHExp(v)+5)
+SymTable:
+v --> 1.int
+Out:
+20
+FileTable:
+
+Heap:
+1 --> 30
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+
+SymTable:
+v --> 1.int
+Out:
+20
+35
+FileTable:
+
+Heap:
+1 --> 30
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+
+SymTable:
+v --> 1.int
+Out:
+20
+35
+FileTable:
+
+Heap:
+1 --> 30
+
+
+----------------------------------------------------------------------
+
+

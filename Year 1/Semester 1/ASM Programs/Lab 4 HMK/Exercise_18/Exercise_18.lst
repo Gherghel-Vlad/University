@@ -1,0 +1,80 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13 00000000 BBA9                        a dw 1010_1001_1011_1011b
+    14 00000002 <res 00000004>              b RESD 1 ; the result should be 0000 1001 0000 1111 1111000010010000 = 11110000100100001111000010010000
+    15                                                                                                            ;10010000111100001001000010101001
+    16                                  
+    17                                  ; our code starts here
+    18                                  segment code use32 class=code
+    19                                      start:
+    20                                          ; Given the word A, compute the doubleword B as follows:
+    21                                          ;    the bits 0-3 of B have the value 0;
+    22                                          ;    the bits 4-7 of B are the same as the bits 8-11 of A
+    23                                          ;    the bits 8-9 and 10-11 of B are the invert of the bits 0-1 of A (so 2 times) ;
+    24                                          ;    the bits 12-15 of B have the value 1
+    25                                          ;    the bits 16-31 of B are the same as the bits 0-15 of B.
+    26                                          
+    27                                          
+    28 00000000 BB00000000                      mov ebx, 0 ; EBX will be my result
+    29                                          
+    30                                          ;    the bits 0-3 of B have the value 0;
+    31                                          
+    32 00000005 80E3F0                          and bl, 11110000b ; forced bits 0-3 to be 0
+    33                                          
+    34                                          ;    the bits 4-7 of B are the same as the bits 8-11 of A
+    35 00000008 66A1[00000000]                  mov ax, [a]
+    36 0000000E 6625000F                        and ax, 0000_1111_0000_0000b ; we isolated the bits 8-11 of AX (a)
+    37 00000012 B104                            mov cl, 4
+    38 00000014 66D3C8                          ror ax, cl ;  rotated to the right 4 positions
+    39 00000017 6609C3                          or bx, ax ; we put the bits in the result
+    40                                          
+    41                                          ;    the bits 8-9 and 10-11 of B are the invert of the bits 0-1 of A (so 2 times) ;
+    42 0000001A 66A1[00000000]                  mov ax, [a]
+    43 00000020 66F7D0                          not ax ;  inverting the bits of AX (a)
+    44 00000023 6683E003                        and ax, 0000000000000011b ; isolated bits 0-1 of AX (a)
+    45 00000027 B108                            mov cl, 8
+    46 00000029 66D3C0                          rol ax, cl ; rotated the bits 0-1 to position 8-9
+    47 0000002C 6609C3                          or bx, ax ; put the bits in the result
+    48 0000002F B102                            mov cl, 2
+    49 00000031 66D3C0                          rol ax, cl ; rotated the bits 2 positions (from 8-9 position to 10-11)
+    50 00000034 6609C3                          or bx, ax ; put the bits in the result
+    51                                          
+    52                                          ;    the bits 12-15 of B have the value 1
+    53 00000037 80CFF0                          or bh, 11110000b ; forced the bits 12-15 to have value 1
+    54                                          
+    55                                          ;    the bits 16-31 of B are the same as the bits 0-15 of B.
+    56 0000003A 6689D8                          mov ax, bx ; saved the 0-15 bits of EBX to AX 
+    57 0000003D B110                            mov cl, 16
+    58 0000003F D3C3                            rol ebx, cl ; rotated so that i have the high part in the low part of EBX
+    59 00000041 6689C3                          mov bx, ax ;  here i put the bits into BX
+    60 00000044 D3C3                            rol ebx, cl ; rotated so that everything is back to normal
+    61                                          
+    62 00000046 891D[02000000]                  mov [b], ebx
+    63                                          
+    64                                          
+    65                                          
+    66                                          
+    67                                          
+    68                                          
+    69                                          
+    70                                          
+    71                                          
+    72                                          
+    73                                          
+    74                                          
+    75                                          
+    76                                          
+    77                                      
+    78                                          ; exit(0)
+    79 0000004C 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    80 0000004E FF15[00000000]                  call    [exit]       ; call exit to terminate the program

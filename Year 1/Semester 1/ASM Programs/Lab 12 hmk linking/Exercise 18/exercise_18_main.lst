@@ -1,0 +1,178 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit, fopen, printf,fscanf               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                  import fopen msvcrt.dll                          ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  import printf msvcrt.dll
+    11                                  import fscanf msvcrt.dll
+    12                                  ; our data is declared here (the variables needed by our program)
+    13                                  segment data use32 class=data
+    14 00000000 6E756D626572732E74-             file_name db "numbers.txt", 0
+    14 00000009 787400             
+    15 0000000C 7200                            file_read_mode db "r", 0
+    16 0000000E 01000000                        file_descriptor dd 1
+    17 00000012 256400                          file_format db "%d", 0
+    18 00000015 25642000                        print_format db "%d ", 0
+    19 00000019 <res 00000064>                  file_content resb 100
+    20 0000007D <res 00000064>                  positive resb 100
+    21 000000E1 <res 00000064>                  negative resb 100
+    22 00000145 54686520706F736974-             message_positive db "The positive numbers array is: ", 0
+    22 0000014E 697665206E756D6265-
+    22 00000157 727320617272617920-
+    22 00000160 69733A2000         
+    23 00000165 0A0D546865206E6567-             message_negative db 10, 13, "The negative numbers array is: ", 0
+    23 0000016E 6174697665206E756D-
+    23 00000177 626572732061727261-
+    23 00000180 792069733A2000     
+    24                                          
+    25                                          
+    26                                  
+    27                                  ; our code starts here
+    28                                  segment code use32 class=code
+    29                                      read_number:
+    30                                          
+    31                                          ; read_text(file_descriptor, file_content)
+    32                                          
+    33 00000000 8B4C240C                        mov ecx, [esp+12] ; ecx = file_format 
+    34 00000004 8B7C2408                        mov edi, [esp+8] ; edi = file_content
+    35 00000008 8B742404                        mov esi, [esp+4] ; esi - file_descriptor
+    36                                          
+    37                                          ; read_text(file_descriptor, file_format, file_content)
+    38                                          
+    39                                          ;int fscanf(FILE *stream, const char *format, ...)
+    40 0000000C 60                              pushad
+    41                                          
+    42 0000000D 57                              push dword edi
+    43 0000000E 51                              push dword ecx
+    44 0000000F FF36                            push dword [esi]
+    45 00000011 FF15[00000000]                  call [fscanf]
+    46 00000017 83C40C                          add esp, 4*3
+    47                                          
+    48 0000001A 61                              popad
+    49                                          
+    50                                          
+    51                                          ; int fread(void * str, int size, int count, FILE * stream)
+    52                                          ;push dword [esi]
+    53                                          ;push dword 100
+    54                                          ;push dword 1
+    55                                          ;push dword edi
+    56                                          ;call [fread]
+    57                                          ;add esp, 4*4
+    58                                          
+    59 0000001B C20800                          ret 4*2
+    60                                          
+    61                                          
+    62                                  print_numbers:
+    63                                      ; print_numbers(message, print format, string of numbers, nr of nubmers)
+    64                                      
+    65 0000001E 8B4C2410                    mov ecx, [esp+16] ; ecx = nr of numbers
+    66 00000022 8B7C240C                    mov edi, [esp+12] ; edi = string of numbers
+    67 00000026 8B5C2408                    mov ebx, [esp+8] ; ebx = print format
+    68 0000002A 8B742404                    mov esi, [esp+4] ; esi = message
+    69 0000002E B800000000                  mov eax, 0 ; eax will show which number to print from the array
+    70                                      ; printing the message
+    71 00000033 60                          pushad
+    72 00000034 56                          push dword esi
+    73 00000035 FF15[00000000]              call [printf]
+    74 0000003B 83C404                      add esp, 4*1
+    75 0000003E 61                          popad
+    76 0000003F E312                        jecxz NoLoop
+    77                                      
+    78                                      repeat3
+    78          ******************       warning: label alone on a line without a colon might be in error [-w+orphan-labels]
+    79                                          
+    80 00000041 60                              pushad
+    81                                          
+    82 00000042 FF3487                          push dword [edi + 4*eax]
+    83 00000045 53                              push dword ebx
+    84 00000046 FF15[00000000]                  call [printf]
+    85 0000004C 83C408                          add esp, 4*2
+    86                                          
+    87                                          
+    88 0000004F 61                              popad
+    89                                          
+    90 00000050 40                              inc eax ; going to the enxt number in the list
+    91                                          
+    92 00000051 E2EE                        loop repeat3
+    93                                      
+    94                                      NoLoop:
+    95                                      
+    96                                      
+    97 00000053 C21000                      ret 4*4
+    98                                      
+    99                                      
+   100                                      start:
+   101                                          
+   102 00000056 68[0C000000]                    push dword file_read_mode
+   103 0000005B 68[00000000]                    push dword file_name
+   104 00000060 FF15[00000000]                  call [fopen]
+   105 00000066 83C408                          add esp, 4*2
+   106                                          
+   107 00000069 A3[0E000000]                    mov [file_descriptor], eax
+   108                                          
+   109 0000006E BB00000000                      mov ebx, 0 ; will show me where in the positive number should i put the new number
+   110 00000073 BA00000000                      mov edx, 0 ; will show me where in the negative number should i put the new number
+   111                                          
+   112                                          repeta2:
+   113 00000078 C705[19000000]0000-                 mov [file_content], dword 0
+   113 00000080 0000               
+   114                                              ; read_text(file_descriptor, file_content)
+   115 00000082 68[12000000]                        push dword file_format
+   116 00000087 68[19000000]                        push dword file_content
+   117 0000008C 68[0E000000]                        push dword file_descriptor
+   118 00000091 E86AFFFFFF                          call read_number
+   119                                              
+   120 00000096 A1[19000000]                        mov eax, [file_content]
+   121                                              
+   122 0000009B 83F800                              cmp eax, 0
+   123 0000009E 741D                                je done
+   124                                              
+   125 000000A0 83F800                              cmp eax,0
+   126 000000A3 7C0C                                jl nr_neg
+   127                                              
+   128 000000A5 8D3C9D[7D000000]                    lea edi, [positive + ebx * 4]
+   129 000000AC 8907                                mov [edi], dword eax
+   130 000000AE 43                                  inc ebx
+   131 000000AF EB0A                                jmp continue
+   132                                              
+   133                                              
+   134                                              nr_neg:
+   135 000000B1 8D3C95[E1000000]                    lea edi, [negative + edx * 4]
+   136 000000B8 8907                                mov [edi], dword eax
+   137 000000BA 42                                  inc edx
+   138                                              
+   139                                              continue:
+   140                                              
+   141 000000BB EBBB                            jmp repeta2
+   142                                          done:
+   143                                          
+   144                                          
+   145                                          
+   146                                      ; print_numbers(message, print format, string of numbers, nr of nubmers)
+   147 000000BD 60                              pushad
+   148                                          
+   149 000000BE 53                              push dword ebx
+   150 000000BF 68[7D000000]                    push dword positive
+   151 000000C4 68[15000000]                    push dword print_format
+   152 000000C9 68[45010000]                    push dword message_positive
+   153 000000CE E84BFFFFFF                      call print_numbers
+   154                                          
+   155 000000D3 61                              popad
+   156                                          
+   157 000000D4 60                              pushad
+   158                                          
+   159 000000D5 52                              push dword edx
+   160 000000D6 68[E1000000]                    push dword negative
+   161 000000DB 68[15000000]                    push dword print_format
+   162 000000E0 68[65010000]                    push dword message_negative
+   163 000000E5 E834FFFFFF                      call print_numbers
+   164                                          
+   165 000000EA 61                              popad
+   166                                          
+   167                                          ; exit(0)
+   168 000000EB 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+   169 000000ED FF15[00000000]                  call    [exit]       ; call exit to terminate the program

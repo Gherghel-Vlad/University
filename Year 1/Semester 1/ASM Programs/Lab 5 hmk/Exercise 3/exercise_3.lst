@@ -1,0 +1,55 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13 00000000 01020304                        s1 db 1, 2, 3, 4
+    14                                          l_s1 EQU $-s1
+    15 00000004 050607                          s2 db 5, 6, 7 ; , 8, 9
+    16                                          l_s2 EQU $-s2
+    17 00000007 FF<rept>                        d times (l_s1+l_s2) db -1
+    18                                  
+    19                                  ; our code starts here
+    20                                  segment code use32 class=code
+    21                                      start:
+    22                                          ; Two byte strings S1 and S2 are given. Obtain the string D by concatenating 
+    23                                          ; the elements of S1 from the left hand side to the right hand side  
+    24                                          ; and the elements of S2 from the right hand side to the left hand side.
+    25                                          ; S1: 1, 2, 3, 4
+    26                                          ; S2: 5, 6, 7
+    27                                          ; D: 1, 2, 3, 4, 7, 6, 5
+    28                                          
+    29 00000000 B904000000                      mov ecx, l_s1 ; ECX = size of s1
+    30 00000005 BE00000000                      mov esi, 0 ; my index for going trough d 
+    31 0000000A E30F                            jecxz endLoop1
+    32                                          Repeat1:
+    33 0000000C 8A9E[00000000]                      mov bl, [s1+esi] ; moved in bl the string value from the position s1_esi
+    34 00000012 889E[07000000]                      mov [d+esi], bl ; saved in the destination location
+    35 00000018 46                                  inc esi ; gotta go up to the next position for s1 and d
+    36 00000019 E2F1                            loop Repeat1
+    37                                          endLoop1:
+    38                                          
+    39 0000001B B903000000                      mov ecx, l_s2 ; ECX = size of s2
+    40 00000020 E312                            jecxz endLoop2
+    41                                          Repeat2:
+    42 00000022 89CB                                mov ebx, ecx ; i need the position s2 + ECX - 1
+    43 00000024 4B                                  dec ebx
+    44 00000025 8A9B[04000000]                      mov bl, [s2+ebx] ; saved in BL the element to be saved in the destiantion location
+    45 0000002B 889E[07000000]                      mov [d+esi], bl ; saving that element where it needs to be
+    46 00000031 46                                  inc esi ; going to the enxt location of d
+    47 00000032 E2EE                            loop Repeat2
+    48                                          endLoop2:
+    49                                          
+    50                                      
+    51                                      
+    52                                      
+    53                                          ; exit(0)
+    54 00000034 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    55 00000036 FF15[00000000]                  call    [exit]       ; call exit to terminate the program

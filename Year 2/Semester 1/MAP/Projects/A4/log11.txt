@@ -1,0 +1,307 @@
+ExeStack:
+(Ref(int) v;(new(v. 10);(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20)))))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ Ref(int) v
+(new(v. 10);(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ Ref(int) v
+(new(v. 10);(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))))
+SymTable:
+
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(v. 10);(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(v. 10);(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(v. 10)
+(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20)))))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(v. 10)
+(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20)))))
+SymTable:
+v --> 0.int
+Out:
+
+FileTable:
+
+Heap:
+
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20)))))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(Ref(Ref(int)) a;(new(a. v);(new(v. a);(new(v. 15);new(a. 20)))))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ Ref(Ref(int)) a
+(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ Ref(Ref(int)) a
+(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))
+SymTable:
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))
+SymTable:
+a --> 0.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(a. v);(new(v. a);(new(v. 15);new(a. 20))))
+SymTable:
+a --> 0.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(a. v)
+(new(v. a);(new(v. 15);new(a. 20)))
+SymTable:
+a --> 0.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(a. v)
+(new(v. a);(new(v. 15);new(a. 20)))
+SymTable:
+a --> 0.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(v. a);(new(v. 15);new(a. 20)))
+SymTable:
+a --> 2.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+2 --> 1.int
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+(new(v. a);(new(v. 15);new(a. 20)))
+SymTable:
+a --> 2.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+2 --> 1.int
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(v. a)
+(new(v. 15);new(a. 20))
+SymTable:
+a --> 2.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+2 --> 1.int
+
+
+----------------------------------------------------------------------
+
+
+ExeStack:
+ new(v. a)
+(new(v. 15);new(a. 20))
+SymTable:
+a --> 2.Ref(int)
+v --> 1.int
+Out:
+
+FileTable:
+
+Heap:
+1 --> 10
+2 --> 1.int
+
+
+----------------------------------------------------------------------
+
+

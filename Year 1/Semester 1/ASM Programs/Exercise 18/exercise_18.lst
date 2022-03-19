@@ -1,0 +1,135 @@
+     1                                  bits 32 
+     2                                  
+     3                                  extern _fopen
+     4                                  extern _fprintf
+     5                                  
+     6                                  global _determine_minimum_from_array
+     7                                  
+     8                                  global _write_number_in_file
+     9                                  
+    10                                  segment data public data use32
+    11 00000000 00000000                    arrayAddress dd 0
+    12 00000004 0000                        minimumNumber dw 0
+    13 00000006 6D696E2E74787400            filename db "min.txt", 0
+    14 0000000E 00000000                    number dd 0
+    15 00000012 00000000                    fileDescriptor dd 0
+    16 00000016 7700                        write_mode db "w", 0
+    17 00000018 257800                      format_number db "%x", 0
+    18                                  
+    19                                  
+    20                                  segment code public code use32
+    21                                      _determine_minimum_from_array:
+    22                                          ; this function determines the minimum from an array of integers and returns it
+    23                                          ; int _determine_minimum_from_array(int array[],int length)
+    24                                          
+    25                                          ; creating the stackframe
+    26 00000000 55                              push ebp
+    27 00000001 89E5                            mov ebp, esp
+    28                                          
+    29                                          ; [ebp] will have the caller's ebp
+    30                                          ; [ebp+4] will have the return address
+    31                                          ; ebp+8 will have the address of my array
+    32                                          ; ebp + 12 the length of my arrray
+    33                                          
+    34                                          ; ECX = how long the array will be
+    35 00000003 8B4D0C                          mov ecx, [ebp+12]
+    36                                          
+    37                                          ; arrayAddress = the address of my first element 
+    38 00000006 8B4508                          mov eax, [ebp+8]
+    39 00000009 A3[00000000]                    mov [arrayAddress], eax
+    40                                          
+    41                                          ; ! integers have the size of 2 bytes
+    42                                          ; cheking if i have elements
+    43 0000000E E338                            jecxz Done
+    44                                          
+    45                                          ; saving the first element of arrayAddress in minimumNumber
+    46 00000010 66A1[00000000]                  mov ax, [arrayAddress]
+    47 00000016 66A3[04000000]                  mov [minimumNumber], ax
+    48                                          
+    49 0000001C 83E901                          sub ecx, 1
+    50                                          
+    51 0000001F E31C                            jecxz DoneMinimum
+    52                                          
+    53                                          repeat1:
+    54 00000021 BA[00000000]                        mov edx, arrayAddress
+    55 00000026 83C202                              add edx, 2
+    56 00000029 668B02                              mov ax, [edx]
+    57                                              
+    58 0000002C 663B05[04000000]                    cmp ax, word [minimumNumber]
+    59 00000033 7D06                                jge NoNewMinimumNumber
+    60                                              
+    61 00000035 66A3[04000000]                      mov [minimumNumber], ax
+    62                                              
+    63                                              
+    64                                              NoNewMinimumNumber:
+    65                                              
+    66                                              
+    67                                          
+    68                                          
+    69                                          
+    70 0000003B E2E4                            loop repeat1
+    71                                          
+    72                                          
+    73                                          DoneMinimum:
+    74 0000003D B800000000                      mov eax, 0
+    75 00000042 66A1[04000000]                  mov ax, [minimumNumber]
+    76                                          
+    77                                          
+    78                                          Done:
+    79 00000048 89EC                            mov esp, ebp
+    80 0000004A 5D                              pop ebp
+    81                                          
+    82 0000004B C3                              ret
+    83                                       
+    84                                       
+    85                                      _write_number_in_file:
+    86                                          
+    87                                          ;creating stack frame
+    88 0000004C 55                              push ebp
+    89 0000004D 89E5                            mov ebp, esp
+    90                                          
+    91                                          ; void _write_number_in_file(filename, number)
+    92                                          ; it writes the number in the given file (creates it if it doesnt exist)
+    93                                          
+    94                                          ; ebp+8 has the filename
+    95                                          ; ebp+12 the number
+    96                                          ;mov eax, [ebp+8]
+    97                                          ;mov [filename], eax
+    98                                          
+    99 0000004F 8B450C                          mov eax, [ebp+12]
+   100 00000052 A3[0E000000]                    mov [number], eax
+   101                                          
+   102                                          
+   103                                          
+   104                                          ;FILE *fopen(const char *filename, const char *mode)
+   105 00000057 68[16000000]                    push dword write_mode
+   106 0000005C 68[06000000]                    push dword filename
+   107 00000061 E8(00000000)                    call _fopen
+   108 00000066 83C408                          add esp, 4*2
+   109                                          
+   110                                          ; saving the descriptor
+   111 00000069 A3[12000000]                    mov [fileDescriptor], eax
+   112                                          
+   113                                          ; int fprintf(FILE *stream, const char *format, ...)
+   114 0000006E FF35[0E000000]                  push dword [number]
+   115 00000074 68[18000000]                    push dword format_number
+   116 00000079 FF35[12000000]                  push dword [fileDescriptor]
+   117 0000007F E8(00000000)                    call _fprintf
+   118 00000084 83C40C                          add esp, 4*3
+   119                                          
+   120                                          
+   121 00000087 89EC                            mov esp, ebp
+   122 00000089 5D                              pop ebp
+   123                                          
+   124 0000008A C3                              ret 
+   125                                      
+   126                                      
+   127                                      
+   128                                      
+   129                                      
+   130                                      
+   131                                         
+   132                                      
+   133                                          
+   134                                          
+   135                                          

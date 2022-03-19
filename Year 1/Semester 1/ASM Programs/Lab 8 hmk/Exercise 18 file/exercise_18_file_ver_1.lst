@@ -1,0 +1,155 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit, fopen, fclose, printf, fread                   ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll 
+     9                                  import fopen msvcrt.dll 
+    10                                  import fclose msvcrt.dll 
+    11                                  import printf msvcrt.dll 
+    12                                  import fread msvcrt.dll    
+    13                                  
+    14                                  ; our data is declared here (the variables needed by our program)
+    15                                  segment data use32 class=data
+    16                                          ; johnny cash again : )
+    17 00000000 66696C652E74787400              file_name db "file.txt", 0
+    18 00000009 7200                            read_mode db "r", 0
+    19 0000000B FFFFFFFF                        file_descriptor dd -1
+    20 0000000F 0000000000000000                number_of_words dd 0, 0
+    21 00000017 546865206E756D6265-             text db "The number of words in the file is: %d", 0
+    21 00000020 72206F6620776F7264-
+    21 00000029 7320696E2074686520-
+    21 00000032 66696C652069733A20-
+    21 0000003B 256400             
+    22 0000003E 0000                            byte_read db 0,  0
+    23 00000040 FF00                            last_byte_read db -1, 0
+    24                                          
+    25                                          
+    26                                  
+    27                                  ; our code starts here
+    28                                  segment code use32 class=code
+    29                                      start:
+    30                                          ; A text file is given. The text contains letters, spaces and points. Read the content of the file, determine the number of words and display the result on the screen. (A word is a sequence of characters sep
+    31                                          ; mov [last_byte_read], byte -1
+    32                                          ; mov [number_of_words], dword 0
+    33                                          ; BIG QUESTION!!!: WHY DO I GET AN ACCESS VIOLATION TO THE MEMORY VARIABLES THAT ARE UP IF I DONT DO WHAT I DID 
+    34                                          ; I get memory access violation to an add and push for both of those variables. And if i dont do that weird mov at the beginning
+    35                                          ; i cant run in debug mode. I can build it and run it. UPDATE: But now it works...if i deleted that
+    36                                          
+    37                                          ; opening the file
+    38                                          ; FILE * fopen(const char* file_name, const char * access_mode)
+    39 00000000 68[09000000]                    push dword read_mode
+    40 00000005 68[00000000]                    push dword file_name
+    41 0000000A FF15[00000000]                  call [fopen]
+    42 00000010 83C408                          add esp, 4 * 2
+    43                                          
+    44                                          
+    45 00000013 A3[0B000000]                    mov [file_descriptor], eax
+    46                                          
+    47                                          ; check if it opened correctly
+    48 00000018 83F800                          cmp eax, 0
+    49 0000001B 0F84D6000000                    je final
+    50                                          
+    51                                          loop_read:
+    52                                              
+    53                                              ;int fread(void * str, int size, int count, FILE * stream)
+    54                                              ; reading a character from the file
+    55 00000021 FF35[0B000000]                      push dword [file_descriptor]
+    56 00000027 6A01                                push dword 1
+    57 00000029 6A01                                push dword 1
+    58 0000002B 68[3E000000]                        push dword byte_read
+    59 00000030 FF15[00000000]                      call [fread]
+    60 00000036 83C410                              add esp, 4 * 4
+    61                                              
+    62                                              ; byte_read will have the character read from the file
+    63                                              
+    64 00000039 83F800                              cmp eax, 0
+    65 0000003C 746B                                je LastWordCase
+    66                                              
+    67                                              ; i will check if it s a letter or not
+    68                                              
+    69 0000003E 803D[3E000000]41                    cmp byte [byte_read], 'A'
+    70 00000045 7C1D                                jl NotCharacter
+    71 00000047 803D[3E000000]5A                    cmp byte [byte_read], 'Z'
+    72 0000004E 7E48                                jle done
+    73 00000050 803D[3E000000]61                    cmp byte [byte_read], 'a'
+    74 00000057 7C0B                                jl NotCharacter
+    75 00000059 803D[3E000000]7A                    cmp byte [byte_read], 'z'
+    76 00000060 7F02                                jg NotCharacter
+    77                                              ; if it s a letter then i will go read the next one
+    78 00000062 EB34                                jmp done
+    79                                              
+    80                                              NotCharacter:
+    81                                              
+    82                                              ; if it s not a character, but the last character read is, that means it s a word
+    83                                              ; jump to the next read of a byte if it s the first reading 
+    84 00000064 803D[40000000]FF                    cmp byte [last_byte_read], -1
+    85 0000006B 742B                                je done
+    86                                              
+    87                                              ; check if the last byte read is a character
+    88                                              
+    89 0000006D 803D[40000000]41                    cmp byte [last_byte_read], 'A'
+    90 00000074 7C22                                jl done
+    91 00000076 803D[40000000]5A                    cmp byte [last_byte_read], 'Z'
+    92 0000007D 7E12                                jle ItsANewWord
+    93 0000007F 803D[40000000]61                    cmp byte [last_byte_read], 'a'
+    94 00000086 7C10                                jl done
+    95 00000088 803D[40000000]7A                    cmp byte [last_byte_read], 'z'
+    96 0000008F 7F07                                jg done
+    97                                              
+    98                                              ItsANewWord:
+    99                                              ; this means that it s new word read
+   100 00000091 8305[0F000000]01                    add dword [number_of_words], 1
+   101                                              
+   102                                              
+   103                                              done:
+   104                                              
+   105 00000098 8A25[3E000000]                      mov ah, [byte_read]
+   106 0000009E 8825[40000000]                      mov [last_byte_read], ah
+   107                                          
+   108 000000A4 E978FFFFFF                      jmp loop_read
+   109                                          
+   110                                          LastWordCase:
+   111                                          
+   112                                          ; if the last byte read was a letter, it wasnt comparred to anything, so i have to check it as well
+   113 000000A9 803D[40000000]41                cmp byte [last_byte_read], 'A'
+   114 000000B0 7C22                            jl close
+   115 000000B2 803D[40000000]5A                cmp byte [last_byte_read], 'Z'
+   116 000000B9 7E12                            jle Continue
+   117 000000BB 803D[40000000]61                cmp byte [last_byte_read], 'a'
+   118 000000C2 7C10                            jl close
+   119 000000C4 803D[40000000]7A                cmp byte [last_byte_read], 'z'
+   120 000000CB 7F07                            jg close
+   121                                          
+   122                                          Continue:
+   123 000000CD 8305[0F000000]01                add dword [number_of_words], 1
+   124                                          
+   125                                          
+   126                                          
+   127                                          close:
+   128                                          
+   129                                          
+   130                                          ;int printf(const char * format, variable_1, constant_2, ...);
+   131                                          ; printing the result on the screen
+   132 000000D4 FF35[0F000000]                  push dword [number_of_words]
+   133 000000DA 68[17000000]                    push dword text
+   134 000000DF FF15[00000000]                  call [printf]
+   135 000000E5 83C408                          add esp, 4 * 2
+   136                                          
+   137                                          
+   138                                          ;int fclose(FILE * descriptor)
+   139                                          ; closing the opened file
+   140 000000E8 FF35[0B000000]                  push dword [file_descriptor]
+   141 000000EE FF15[00000000]                  call [fclose]
+   142 000000F4 83C404                          add esp, 4 * 1
+   143                                          
+   144                                          
+   145                                          
+   146                                          final:
+   147                                          
+   148                                      
+   149                                          ; exit(0)
+   150 000000F7 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+   151 000000F9 FF15[00000000]                  call    [exit]       ; call exit to terminate the program

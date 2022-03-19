@@ -1,0 +1,49 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13 00000000 0A                          a db 10
+    14 00000001 14                          b db 20
+    15 00000002 19                          c db 25
+    16 00000003 0000                        ba dw 0
+    17 00000005 0000                        ca dw 0
+    18 00000007 FF00                        d dw 255
+    19                                  
+    20                                  ; our code starts here
+    21                                  segment code use32 class=code
+    22                                      start:
+    23                                          ; question: if d/a has a rest how do we delete it? or should we substract just like in real life...getting every variable /a first 
+    24                                          ; 200-[3*(c+b-d/a)-300] = 200 - [3*((455-255)/10) - 300] = 200 - (585/10 - 300) = 200 - (-2415/10) = 4415/10 = 441 r 5
+    25                                          
+    26 00000000 A0[01000000]                    mov AL, [b] ; AL = b
+    27 00000005 0205[02000000]                  add AL, [c] ; AL += c
+    28 0000000B F62D[00000000]                  imul byte [a] ; AX = AL * a
+    29 00000011 662B05[07000000]                sub AX, [d]; al = al-d
+    30                                          
+    31 00000018 66BB0300                        mov BX, 3
+    32 0000001C 66F7EB                          imul BX; DX:AX = AX * BX
+    33                                          
+    34 0000001F 662DB80B                        sub AX, 3000 ; ax -= 3000
+    35 00000023 66BBD007                        mov BX, 2000
+    36 00000027 6629C3                          sub BX, AX ; BX = bx - ax 
+    37 0000002A 6689D8                          mov ax, bx
+    38                                          
+    39                                          ;overflow if we divide by a byte that s small
+    40 0000002D 8A1D[00000000]                  mov BL, [a]
+    41 00000033 B700                            mov BH, 0
+    42 00000035 66F7FB                          idiv BX ; AX = ax/a DX = ax%a
+    43                                          
+    44                                      
+    45                                      
+    46                                      
+    47                                          ; exit(0)
+    48 00000038 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    49 0000003A FF15[00000000]                  call    [exit]       ; call exit to terminate the program

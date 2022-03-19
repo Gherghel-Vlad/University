@@ -1,0 +1,22 @@
+
+For a:
+
+Ask the user for the p that is our probability
+Ask the user for the number of simulations (N)
+Inside U generate a vector of N random numbers
+X = (U < p)
+U_X = unique(X) (reduced duplicates)
+n_X = hist(X,length(U_X)) (how many aparations of 0 and 1 we have)
+rel_freq = n_X/N (the relative frequencies)
+
+
+For b:
+
+U X
+Ask the user for n and p
+Ask the user for the number of simulations (N)
+Implement a for circle where i goes from 1 to big N that contains 2 lines: 
+	1. Define U as a vector of random number length n
+	2. X(i) = sum(U<p)
+Using the 3 lines that he had written inside the meeting (last 3 lines for a) draw a plot: 
+	inside compare the graph of uniques in X with the relative frequencies in comparison of the binopfd with parameters n and p

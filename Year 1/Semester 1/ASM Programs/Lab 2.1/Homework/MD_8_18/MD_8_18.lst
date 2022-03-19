@@ -1,0 +1,64 @@
+     1                                  bits 32 ; assembling for the 32 bits architecture
+     2                                  
+     3                                  ; declare the EntryPoint (a label defining the very first instruction of the program)
+     4                                  global start        
+     5                                  
+     6                                  ; declare external functions needed by our program
+     7                                  extern exit               ; tell nasm that exit exists even if we won't be defining it
+     8                                  import exit msvcrt.dll    ; exit is a function that ends the calling process. It is defined in msvcrt.dll
+     9                                                            ; msvcrt.dll contains exit, printf and all the other important C-runtime specific functions
+    10                                  
+    11                                  ; our data is declared here (the variables needed by our program)
+    12                                  segment data use32 class=data
+    13                                      
+    14 00000000 14                          a db 20
+    15 00000001 19                          c db 25
+    16 00000002 1E                          d db 30
+    17 00000003 9600                        f dw 150
+    18                                      
+    19                                  
+    20                                  ; our code starts here
+    21                                  segment code use32 class=code
+    22                                      start:
+    23                                          ; f+(c-2)*(3+a)/(d-4) = 150 + (23 * 23) / 26 = (3900 + 529) /26 = 4429 / 26 = 170 r 9
+    24                                          
+    25                                          ; here we do the (c-2) * (3 + a)
+    26 00000000 A0[01000000]                    mov AL, [c] ; al = c
+    27 00000005 2C02                            sub AL, 2; Al -=2
+    28 00000007 8A1D[00000000]                  mov BL, [a] ; bl = c
+    29 0000000D 80C303                          add bl, 3 ; bl += 3
+    30 00000010 F6E3                            mul BL ; AX = AL * BL
+    31                                          
+    32                                          ; here we make f*(d-4)/(d-4) so that we can add the higher part of the function
+    33                                          ; ax will have the (c-2) * (3 + a) result
+    34 00000012 6689C3                          mov bx, ax; bx = ax
+    35                                          
+    36 00000015 A0[02000000]                    mov al, [d]; bl = d
+    37 0000001A 2C04                            sub al, 4; bl -= 4
+    38 0000001C B400                            mov ah, 0; ah = 0
+    39                                          
+    40 0000001E 66F725[03000000]                mul word [f]; DX:AX = f * AX
+    41                                          
+    42                                          ; here we add the ax =f*(d-4)/(d-4) to the bx =(c-2)*(3+a)/(d-4)
+    43 00000025 6601D8                          add ax, bx; ax += bx
+    44                                          
+    45                                          ; here we divide the sum to d-4
+    46 00000028 8A1D[02000000]                  mov bl, [d]; bl =d
+    47 0000002E 80EB04                          sub bl, 4; bl-=4
+    48                                          ; depend on the valors i cant make a signed division here...in my case i cant
+    49                                          ; for signed values chenge the 2 muls from above as well in imuls
+    50 00000031 F6F3                            div bl ; al = ax/bl ah = ax%bl
+    51                                          
+    52                                          
+    53                                          
+    54                                          
+    55                                          
+    56                                          
+    57                                          
+    58                                          
+    59                                          
+    60                                          
+    61                                      
+    62                                          ; exit(0)
+    63 00000033 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    64 00000035 FF15[00000000]                  call    [exit]       ; call exit to terminate the program

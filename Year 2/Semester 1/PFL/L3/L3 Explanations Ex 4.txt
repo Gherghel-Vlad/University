@@ -1,0 +1,27 @@
+4.Write a function that returns the product of numeric atoms in a list,at any level.
+
+(print (APPLY #'* (MAPCAR 
+    #'(LAMBDA (x) 
+            (LABELS ((prod(x) 
+                (COND 
+                    ((null x) 1) 
+                    ((NUMBERP x) x) 
+                    ((LISTP x) (* (prod (car x)) (prod (cdr x)))) 
+                    (T 1)
+                )
+                )
+                )
+                
+                (prod x)
+            )
+                
+            ) 
+    '(1 2 A 3 B 4 (1 (2 (2) 2) 2)))))
+
+
+
+I am using the function 
+prod(x) = 1, x=nil
+	 x, x is number
+	prod(x1) * prod(x2x3...xn), x is a list
+	1, otherwise

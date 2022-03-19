@@ -1,0 +1,80 @@
+
+Exercise 14
+
+a.
+
+contains(E, b1b2...bm) = - false, m=0
+			 - true, b1=E
+			 - contains(E. b2b3...bm) otherwise
+
+eq(l1l2...ln, b1b2....bm) = - true, n=0
+			    - false, contains(l1, b1b2...bm) = false
+			    - eq(l2l3...ln, b1b2...bm) otherwise
+
+equal(l1l2...ln, b1b2...bm) = - true, eq(l1l2...ln, b1b2...bm) && eq(b1b2...bm, l1l2...ln)
+			      - false otherwise
+
+%contains(E: integer, L: list)
+% flow model: (i,i)
+% E- element to be searched for in the given list
+% L - list in which to search for the given element
+
+contains(_,[]):- false.
+contains(E, [H|_]):-
+    E=:=H,
+    !.
+contains(E,[_|T]):-
+    contains(E, T).
+
+% eq(L: list, B: list)
+% eq(i,i)
+% L - first set
+% B - second set
+eq([], _):- 
+    true.
+eq([H|T], B):-
+    contains(H, B),
+    !,
+	eq(T, B).
+eq([_], _):-
+    false.
+
+% equal(L: list, B: list)
+% equal(i,i)
+% L - first list
+% B - second list
+equal(L, B):-
+    eq(L, B),
+    eq(B, L).
+
+
+b.
+
+select(l1l2...ln, N) = - null, if N<=0
+		       - null, if n=0 and N>=1
+		       - l1, N=1
+		       - select(l2l3...ln, N-1) otherwise
+
+%select(L: list, N: integer, R: result)
+% flow model: select(i,i,o) select(i,i,i)
+% L- list given to work with
+% N - the n-th position in the list
+% R - the n-th element
+
+select(_, N, _):-
+    N=<0,
+    false.
+select([], _, _):-
+    false.
+select([H|_], N, R):-
+    N=:=1,
+    !,
+    R=H.
+select([_|T], N, R):-
+    N>1,
+    N1 is N-1,
+    select(T, N1, R).
+
+
+
+
